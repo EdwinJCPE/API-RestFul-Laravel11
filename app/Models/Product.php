@@ -34,6 +34,15 @@ class Product extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'pivot',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
