@@ -76,19 +76,49 @@ class SellerProductController extends ApiController
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Seller $seller)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Seller $seller)
+    public function update(Request $request, Seller $seller, Product $product)
     {
-        //
+        // $rules = [
+        //     'quantity' => 'integer|min:1',
+        //     'status' => 'in:' . Product::PRODUCTO_DISPONIBLE . ',' . Product::PRODUCTO_NO_DISPONIBLE,
+        //     'image' => 'image',
+        // ];
+
+        $rules = [
+            'quantity' => ['integer', 'min:1'],
+            'status' => ['in:' . Product::PRODUCTO_DISPONIBLE . ',' . Product::PRODUCTO_NO_DISPONIBLE],
+            'image' => ['image'], // Comentado para enviar en formato Json desde Postman
+        ];
+
+        $request->validate($rules);
+
+        if ($seller->id != $product->seller_id) {
+            return $this->errorResponse('El vendedor especificado no es el vendedor real del producto', 422);
+        }
+
+        $product->fill($request->only([
+            'name',
+            'description',
+            'quantity',
+        ]));
+
+        if ($request->has('status')) {
+            $product->status = $request->status;
+
+            if ($product->estaDisponible() && $product->categories()->count() == 0) {
+                return $this->errorResponse('Un producto activo debe tener al menos una categoría', 409);
+            }
+        }
+
+        if ($product->isClean()) { // isClean: Verifica que la instancia no haya cambiado
+            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar.', 422);
+        }
+
+        $product->save();
+
+        return $this->showOne($product);
     }
 
     /**
