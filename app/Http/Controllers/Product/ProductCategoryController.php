@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Product;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 
@@ -22,9 +23,24 @@ class ProductCategoryController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    // public function update(Request $request, Product $product)
+    // public function update(Request $request, string $product_id, string $category_id)
+    public function update(Request $request, Product $product, Category $category)
     {
-        //
+        // Agregar una categoría a un producto existente
+        // $product = Product::findOrFail($product_id);
+        // $category = Category::findOrFail($category_id);
+
+        // dd($product, $category);
+        // 
+        // sync, attach, syncWithoutDetaching
+        // 
+        // $product->categories()->sync([$category->id]); // Sincronización Completa (Elimina y Añade)
+        // $product->categories()->attach([$category->id]); // Agregar Registros (Permite Duplicados)
+        // 
+        $product->categories()->syncWithoutDetaching([$category->id]); // Añadir sin Eliminar (Evita Duplicados)
+
+        return $this->showAll($product->categories);
     }
 
     /**
