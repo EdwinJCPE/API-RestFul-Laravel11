@@ -24,6 +24,7 @@ use App\Http\Controllers\Seller\SellerTransactionController;
 use App\Http\Controllers\Product\ProductTransactionController;
 use App\Http\Controllers\Category\CategoryTransactionController;
 use App\Http\Controllers\Transaction\TransactionSellerController;
+use App\Http\Controllers\Product\ProductBuyerTransactionController;
 use App\Http\Controllers\Transaction\TransactionCategoryController;
 
 // Route::get('/user', function (Request $request) {
@@ -62,6 +63,7 @@ Route::apiResource('products.buyers', ProductBuyerController::class, ['only' => 
 // Route::apiResource('products.categories', ProductCategoryController::class, [ 'only' => ['index', 'update', 'destroy']]);
 Route::apiResource('products.categories', ProductCategoryController::class, ['except' => ['store', 'show']]);
 Route::apiResource('products.transactions', ProductTransactionController::class, ['only' => ['index']]);
+Route::apiResource('products.buyers.transactions', ProductBuyerTransactionController::class, ['only' => ['store']]);
 
 /**
  * Transactions
