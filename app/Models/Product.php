@@ -54,6 +54,20 @@ class Product extends Model
         ];
     }
 
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function (Product $product) {
+            if ($product->quantity == 0 && $product->estaDisponible()) {
+                $product->status = Product::PRODUCTO_NO_DISPONIBLE;
+
+                $product->save();
+            }
+        });
+    }
+
     public function estaDisponible()
     {
         return $this->status == Product::PRODUCTO_DISPONIBLE;
