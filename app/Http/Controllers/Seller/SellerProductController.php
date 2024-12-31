@@ -47,7 +47,7 @@ class SellerProductController extends ApiController
 
         $data = $request->all();
         $data['status'] = Product::PRODUCTO_NO_DISPONIBLE;
-        $data['image'] = '1.jpg';
+        $data['image'] = '1.jpg';       
         $data['seller_id'] = $seller->id;
 
         // dd($data);
