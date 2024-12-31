@@ -47,7 +47,10 @@ class SellerProductController extends ApiController
 
         $data = $request->all();
         $data['status'] = Product::PRODUCTO_NO_DISPONIBLE;
-        $data['image'] = '1.jpg';       
+        // $data['image'] = '1.jpg';
+        // $data['image'] = $request->image->store(''); // Si el sistema de archivos por defecto es images (FILESYSTEM_DISK=images)
+        $data['image'] = $request->image->store('', 'images');
+        // $data['image'] = $request->image->store('products', 'images');
         $data['seller_id'] = $seller->id;
 
         // dd($data);
