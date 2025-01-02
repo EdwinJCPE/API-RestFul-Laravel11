@@ -2,14 +2,15 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UserCreate extends Mailable
+class UserCreated extends Mailable
 {
     use Queueable, SerializesModels;
     // public $user;
@@ -30,7 +31,8 @@ class UserCreate extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'User Create',
+            // subject: 'User Create',
+            subject: 'Por favor confirma tu correo electrónico',
         );
     }
 

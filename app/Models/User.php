@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Mail\UserCreated;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -69,6 +71,21 @@ class User extends Authenticatable
             'password' => 'hashed',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            // Mail::to($user->email)->send(new UserCreated($user));
+            // Mail::to($user)->send(new UserCreated($user));
+
+            retry(5, function() use ($user) { // Si el envío de correo falla Laravel lo va intentar 5 veces cada 100 ms
+                Mail::to($user)->send(new UserCreated($user));
+            }, 100);
+        });
     }
 
     public function esVerificado()
