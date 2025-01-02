@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Una de las formas recomendadas de usar eventos es directamente en los modelos usando funciones anónimas - Laravel 7+
         // User::created(function (User $user) {
         //     // Mail::to($user->email)->send(new UserCreated($user));
         //     // Mail::to($user)->send(new UserCreated($user));
