@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Mail\UserCreated;
 use Illuminate\Support\Str;
+use App\Mail\UserMailChanged;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
@@ -85,6 +86,14 @@ class User extends Authenticatable
             retry(5, function() use ($user) { // Si el envío de correo falla Laravel lo va intentar 5 veces cada 100 ms
                 Mail::to($user)->send(new UserCreated($user));
             }, 100);
+        }); 
+
+        static::updated(function (User $user) {
+            if ($user->isDirty('email')) {
+                retry(5, function() use ($user) {
+                    Mail::to($user)->send(new UserMailChanged($user));
+                }, 100);
+            }
         });
     }
 
