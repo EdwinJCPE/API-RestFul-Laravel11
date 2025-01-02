@@ -86,3 +86,7 @@ Route::apiResource('sellers.transactions', SellerTransactionController::class, [
  */
 // Route::resource('users', UserController::class, [ 'except' => ['create', 'edit']]);
 Route::apiResource('users', UserController::class);
+// Route::get('users/verify/{token}', 'User\UserController@verify')->name('verify'); // En Laravel 7<
+// Route::get('users/verify/{token}', 'App\Http\Controllers\User\UserController@verify')->name('verify');
+// Route::get('users/verify/{token}', ['App\Http\Controllers\User\UserController', 'verify'])->name('verify');
+Route::get('users/verify/{token}', [UserController::class, 'verify'])->name('verify');
