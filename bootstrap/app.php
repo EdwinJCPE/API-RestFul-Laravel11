@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\SignatureMiddleware;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -25,7 +26,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'signature' => SignatureMiddleware::class
+        ]);
+
+        $middleware->web(prepend: [
+            // SignatureMiddleware::class.':X-Application-Name', // Llama directamente a la clase del middleware SignatureMiddleware. No necesita alias
+            'signature:X-Application-Name',
+        ]);
+
+        $middleware->api(prepend: [
+            // SignatureMiddleware::class.':X-Application-Name',
+            'signature:X-Application-Name',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
