@@ -43,7 +43,8 @@ class UserCreated extends Mailable
     {
         return new Content(
             // view: 'view.name',
-            text: 'emails.welcome',
+            // text: 'emails.welcome',
+            markdown: 'emails.welcome',
         );
     }
 
