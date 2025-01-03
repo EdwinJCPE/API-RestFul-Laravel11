@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Middleware\SignatureMiddleware;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
+            'throttle' => ThrottleRequests::class,
+        ]);
+
+        $middleware->alias([
             'signature' => SignatureMiddleware::class
         ]);
 
@@ -38,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             // SignatureMiddleware::class.':X-Application-Name',
             'signature:X-Application-Name',
+            'throttle:api', // Aplicar throttle:api a todas las rutas API
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

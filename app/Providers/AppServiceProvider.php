@@ -5,9 +5,12 @@ namespace App\Providers;
 use App\Models\User;
 use App\Models\Product;
 use App\Mail\UserCreated;
+use Illuminate\Http\Request;
 use App\Mail\UserMailChanged;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // $this->configureRateLimiting();
+
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
         // Una de las formas recomendadas de usar eventos es directamente en los modelos usando funciones anónimas - Laravel 7+
         // User::created(function (User $user) {
         //     // Mail::to($user->email)->send(new UserCreated($user));
@@ -49,5 +58,18 @@ class AppServiceProvider extends ServiceProvider
         //         $product->save();
         //     }
         // });
+    }
+
+    /**
+     * Configure the rate limiters for the application. - Agregado por Edwin JC
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+        // En Laravel 10.x
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }
