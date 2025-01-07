@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Models\Product;
 use App\Models\Scopes\SellerScope;
+use App\Transformers\SellerTransformer;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // use Illuminate\Database\Eloquent\Model;
 
 class Seller extends User
 {
+    public $transformer = SellerTransformer::class;
+
     /**
      * Bootstrap the model and its traits.
      *

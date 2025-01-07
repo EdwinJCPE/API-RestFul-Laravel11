@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Models\Transaction;
 use App\Models\Scopes\BuyerScope;
+use App\Transformers\BuyerTransformer;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // use Illuminate\Database\Eloquent\Model;
 
 class Buyer extends User
 {
+    public $transformer = BuyerTransformer::class;
+
     /**
      * Bootstrap the model and its traits.
      *
