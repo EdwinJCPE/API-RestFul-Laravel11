@@ -93,6 +93,6 @@ Route::apiResource('users', UserController::class);
 Route::get('users/verify/{token}', [UserController::class, 'verify'])->name('verify');
 Route::get('users/{user}/resend', [UserController::class, 'resend'])->name('resend');
 
-Route::middleware([\App\Http\Middleware\CustomThrottleRequests::class])->get('/prueba', function () {
-    return response()->json(['message' => 'Ruta protegida']);
-});
+// Route::middleware([\App\Http\Middleware\CustomThrottleRequests::class])->get('/prueba', function () {
+//     return response()->json(['message' => 'Ruta protegida']);
+// });
