@@ -30,6 +30,7 @@ trait ApiResponser
         // $transformer = $collection->first()->transformer;
         $transformer = $this->getTransformer($collection->first());
 
+        $collection = $this->sortData($collection);
         $collection = $this->transformData($collection, $transformer);
 
         // return $this->successResponse(['data' => $collection], $code);
@@ -52,6 +53,18 @@ trait ApiResponser
     protected function showMessage($message, $code = 200)
     {
         return $this->successResponse(['data' => $message], $code);
+    }
+
+    protected function sortData(Collection $collection)
+    {
+        if (request()->has('sort_by')) {  // Verificamos si en la petición existe el valor sort_by
+            $attribute = request()->sort_by;
+
+            // $collection = $collection->sortBy($attribute);
+            $collection = $collection->sortBy->{$attribute};
+        }
+
+        return $collection;
     }
 
     protected function transformData($data, $transformer)
