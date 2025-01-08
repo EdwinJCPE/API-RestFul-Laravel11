@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -88,9 +89,20 @@ trait ApiResponser
 
     protected function paginate(Collection $collection)
     {
+        $rules = [
+            // 'per_page' => 'integer|min:2|max:50',
+            'per_page' => ['integer', 'min:2', 'max:50'],
+        ];
+
+        Validator::validate(request()->all(), $rules);
+
         $page = LengthAwarePaginator::resolveCurrentPage(); // Obtener la página actual
 
+        // $perPage = (int) request()->get('per_page', 15); // Resultados por página (default: 15)
         $perPage = 15; // Cantidad de elementos de página
+        if (request()->has('per_page')) {
+            $perPage = (int) request()->per_page;
+        }
 
         // Paginación manual sobre la colección
         $results = $collection->slice(($page - 1) * $perPage, $perPage)->values(); // Dividir la colleción según la página y cantidad
