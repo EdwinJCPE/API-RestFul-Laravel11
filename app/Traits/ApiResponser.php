@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait ApiResponser
@@ -32,6 +33,7 @@ trait ApiResponser
 
         $collection = $this->filterData($collection, $transformer);
         $collection = $this->sortData($collection, $transformer);
+        $collection = $this->paginate($collection);
         $collection = $this->transformData($collection, $transformer);
 
         // return $this->successResponse(['data' => $collection], $code);
@@ -82,6 +84,26 @@ trait ApiResponser
         }
 
         return $collection;
+    }
+
+    protected function paginate(Collection $collection)
+    {
+        $page = LengthAwarePaginator::resolveCurrentPage(); // Obtener la página actual
+
+        $perPage = 15; // Cantidad de elementos de página
+
+        // Paginación manual sobre la colección
+        $results = $collection->slice(($page - 1) * $perPage, $perPage)->values(); // Dividir la colleción según la página y cantidad
+
+        // Crear la instancia de paginación
+        $paginated = new LengthAwarePaginator($results, $collection->count(), $perPage, $page, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+        ]);
+
+        // Añadir los parámetros de la query a la paginación
+        $paginated->appends(request()->all()); // Agregar a los resultados paginados la lista de los parámetros, debido que fueron eleminados cuando se agrega: 'path' => LengthAwarePaginator::resolveCurrentPath(), 
+
+        return $paginated;
     }
 
     protected function transformData($data, $transformer)
