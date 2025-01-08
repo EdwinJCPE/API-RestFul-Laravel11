@@ -30,6 +30,7 @@ trait ApiResponser
         // $transformer = $collection->first()->transformer;
         $transformer = $this->getTransformer($collection->first());
 
+        $collection = $this->filterData($collection, $transformer);
         $collection = $this->sortData($collection, $transformer);
         $collection = $this->transformData($collection, $transformer);
 
@@ -53,6 +54,21 @@ trait ApiResponser
     protected function showMessage($message, $code = 200)
     {
         return $this->successResponse(['data' => $message], $code);
+    }
+
+    protected function filterData(Collection $collection, $transformer)
+    {
+        // Ejemplo: http://apirestful.test/users?esVerificado=1
+        // http://apirestful.test/users?esVerificado=1&esAdministrador=true
+        foreach (request()->query() as $query => $value) { // recorrer todos los parámetros de la URL
+            $attribute = $transformer::originalAttribute($query);
+
+            if (isset($attribute, $value)) {
+                $collection = $collection->where($attribute, $value);
+            }
+        }
+
+        return $collection;
     }
 
     protected function sortData(Collection $collection, $transformer)
