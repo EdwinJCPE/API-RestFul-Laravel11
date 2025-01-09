@@ -140,10 +140,18 @@ trait ApiResponser
 
     protected function cacheResponse($data)
     {
-        $url = request()->url();
+        $url = request()->url(); // URL base (sin parámetros)
+        $queryParams = request()->query(); // Parámetros de consulta
 
+        ksort($queryParams); // Ordenar alfabéticamente los parámetros para garantizar consistencia
+
+        $queryString = http_build_query($queryParams); // Crear una cadena de consulta a partir de los parámetros
+
+        $fullUrl = "{$url}?{$queryString}"; // Concatenar la URL base con la cadena de consulta
+
+        // Almacenar en caché usando la URL completa como clave
         // return Cache::remember($url, 30/60, function() use ($data) {
-        return Cache::remember($url, 30, function() use ($data) { // En Laravel 5.8+ el tiempo es en Segundos
+        return Cache::remember($fullUrl, 30, function() use ($data) { // En Laravel 5.8+ el tiempo es en Segundos
             return $data;
         });
     }
