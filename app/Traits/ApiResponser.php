@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -36,6 +37,7 @@ trait ApiResponser
         $collection = $this->sortData($collection, $transformer);
         $collection = $this->paginate($collection);
         $collection = $this->transformData($collection, $transformer);
+        $collection = $this->cacheResponse($collection);
 
         // return $this->successResponse(['data' => $collection], $code);
         return $this->successResponse($collection, $code);
@@ -134,5 +136,15 @@ trait ApiResponser
         }
 
         return $transformer;
+    }
+
+    protected function cacheResponse($data)
+    {
+        $url = request()->url();
+
+        // return Cache::remember($url, 30/60, function() use ($data) {
+        return Cache::remember($url, 30, function() use ($data) { // En Laravel 5.8+ el tiempo es en Segundos
+            return $data;
+        });
     }
 }
