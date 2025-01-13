@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class TransformInput
@@ -30,8 +31,29 @@ class TransformInput
             $transformedInput[$transformer::originalAttribute($input)] = $value;
         }
 
-        $request->replace($transformedInput);
+        $request->replace($transformedInput); // Reemplazar en la petición original por lo que tenemos actualmente
 
-        return $next($request);
+        // Transformando las Respuestas
+        // Realizar las modificaciones de la respueta antes de retornarla
+        $response = $next($request);
+        // dd($response);
+
+        //Verificamos si es una respuesta de error (Si esta respuesta de error tiene una excepción entonces es una respuesta de error) y el caso especificio de excepción que es ValidationException
+        if (isset($response->exception) && $response->exception instanceof ValidationException) {
+            $data = $response->getData(); // Obtener los datos de la respuesta
+
+            $transformedErrors = [];
+
+            foreach ($data->error as $field => $error) {
+                $transformedField = $transformer::transformedAttribute($field);
+                $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);
+            }
+
+            $data->error = $transformedErrors;
+
+            $response->setData($data);
+        }
+        
+        return $response;
     }
 }
