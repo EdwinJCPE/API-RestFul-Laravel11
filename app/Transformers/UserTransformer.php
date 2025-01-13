@@ -76,4 +76,24 @@ class UserTransformer extends TransformerAbstract
 
         // return isset($attributes[$index]) ? $attributes[$index] : null;
     }
+
+    /**
+     * Seleccionar la clave del array usando mútiples cursores en Windows: 
+     * Coloca el cursor al inicio del array, mantén presionadas las teclas CTRL + ALT y utiliza la tecla flecha hacia abajo para añadir cursores en todas las líneas del array; una vez hecho esto, mantén presionadas las teclas CTRL + SHIFT y utiliza la tecla flecha derecha para seleccionar el texto de las claves.
+     */
+    public static function transformedAttribute($index)
+    {
+        $attributes = [
+             'id' => 'identificador',
+             'name' => 'nombre',
+             'email' => 'correo',
+             'verified' => 'esVerificado',
+             'admin' => 'esAdministrador',
+             'created_at' => 'fechaCreacion',
+             'updated_at' => 'fechaActualizacion',
+             'deleted_at' => 'fechaEliminacion',
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
 }
