@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\TransformInput;
 use App\Http\Middleware\SignatureMiddleware;
 use App\Http\Middleware\CustomThrottleRequests;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -28,11 +29,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Este registro manual es inecesario. Laravel ya tiene registrado ThrottleRequests con el alias throttle por defecto.
-        // $middleware->alias([
-        //     'throttle' => ThrottleRequests::class,
-        // ]); 
-        
         // // Reemplazar el middleware de throttling en las rutas API
         // // Solo se reemplaza la clase ThrottleRequests internamente en los grupos de middleware web o api, pero el alias throttle sigue apuntando al middleware original. La solución es reemplazar a nivel de alias en AppServiceProvider.
         // $middleware->api(replace: [
@@ -40,7 +36,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // ]);
         
         $middleware->alias([
-            'signature' => SignatureMiddleware::class
+            // 'throttle' => ThrottleRequests::class, // Este registro manual es inecesario. Laravel ya tiene registrado ThrottleRequests con el alias throttle por defecto.
+            'signature' => SignatureMiddleware::class,
+            'transform.input' => TransformInput::class,
         ]);
 
         $middleware->web(prepend: [

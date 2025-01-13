@@ -8,11 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Transformers\UserTransformer;
 use App\Http\Controllers\ApiController;
 
 // class UserController extends Controller
 class UserController extends ApiController
 {
+    /**
+     * The middleware registered on the controller.
+     *
+     * @var array
+     */
+    // protected $middleware = [
+    //     'transform.input:' . UserTransformer::class => ['only' => ['store', 'update']],
+    // ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
+    }
+
     /**
      * Display a listing of the resource.
      */
