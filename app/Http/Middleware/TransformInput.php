@@ -49,9 +49,9 @@ class TransformInput
                 $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);
             }
 
-            $data->error = $transformedErrors;
+            $data->error = $transformedErrors; // Sustituir los datos error de la respuesta
 
-            $response->setData($data);
+            $response->setData($data);  // Establecer los nuevos datos para la respuesta
         }
         
         return $response;
