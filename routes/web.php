@@ -33,6 +33,9 @@ Route::post('password/confirm', 'App\Http\Controllers\Auth\ConfirmPasswordContro
 Route::get('email/verify', 'App\Http\Controllers\Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', 'App\Http\Controllers\Auth\VerificationController@verify')->name('verification.verify');
 Route::post('email/resend', 'App\Http\Controllers\Auth\VerificationController@resend')->name('verification.resend');
+=======
+Auth::routes();
+>>>>>>> parent of 864b6f8 (Creando la estructura adicional para autenticación)
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
