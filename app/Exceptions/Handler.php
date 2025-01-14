@@ -6,6 +6,7 @@ use Throwable;
 use App\Traits\ApiResponser;
 use Illuminate\Database\QueryException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -51,7 +52,6 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         // dd($e);
-
         if ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
         }
@@ -111,6 +111,10 @@ class Handler extends ExceptionHandler
             } else {
                 return $this->errorResponse($message, 500);
             }
+        }
+
+        if ($e instanceof TokenMismatchException) {
+            return redirect()->back()->withInput($request->input());
         }
 
         if (config('app.debug')) {
