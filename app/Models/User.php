@@ -6,7 +6,7 @@ namespace App\Models;
 use App\Mail\UserCreated;
 use Illuminate\Support\Str;
 use App\Mail\UserMailChanged;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use App\Transformers\UserTransformer;
 use Illuminate\Notifications\Notifiable;
