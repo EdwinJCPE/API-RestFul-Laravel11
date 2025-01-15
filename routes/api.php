@@ -21,6 +21,7 @@ use App\Http\Controllers\Product\ProductCategoryController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Category\CategoryProductController;
 use App\Http\Controllers\Seller\SellerTransactionController;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Product\ProductTransactionController;
 use App\Http\Controllers\Category\CategoryTransactionController;
 use App\Http\Controllers\Transaction\TransactionSellerController;
@@ -93,6 +94,37 @@ Route::apiResource('users', UserController::class);
 Route::get('users/verify/{token}', [UserController::class, 'verify'])->name('verify');
 Route::get('users/{user}/resend', [UserController::class, 'resend'])->name('resend');
 
+// Route::post('oauth/token', 'Laravel\Passport\Http\Controllers\AccessTokenController@issueToken')->name('passport.token');
+Route::post('oauth/token', [AccessTokenController::class, 'issueToken'])->name('passport.token');
+
 // Route::middleware([\App\Http\Middleware\CustomThrottleRequests::class])->get('/prueba', function () {
 //     return response()->json(['message' => 'Ruta protegida']);
 // });
+
+// Cuando las rutas del grupo api son configuradas dinámicamente en el archivo app.php es necesario inspeccionar en tiempo de ejecución
+// Listar Rutas con Middleware
+Route::get('/routes-with-middleware', function () {
+    return collect(Route::getRoutes())->map(function ($route) {
+        return [
+        	'method' => implode('|', $route->methods()), // Métodos HTTP
+            'uri' => $route->uri(),
+            'name' => $route->getName(),
+            'action' => $route->getActionName(),
+            'middleware' => $route->middleware(),
+            // 'middleware' => implode(', ', $route->middleware()),
+        ];
+    });
+});
+
+// Agregar Filtros por Middleware
+Route::get('/routes-with-specific-middleware', function () {
+    return collect(Route::getRoutes())
+        ->filter(fn($route) => in_array('api', $route->middleware())) // Filtra rutas con middleware 'api'
+        ->map(fn($route) => [
+        	'method' => implode('|', $route->methods()), // Métodos HTTP
+            'uri' => $route->uri(),
+            'name' => $route->getName(),
+            'action' => $route->getActionName(),
+            'middleware' => $route->middleware(),
+        ]);
+});

@@ -8,6 +8,7 @@ use App\Mail\UserCreated;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Mail\UserMailChanged;
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -31,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Passport::routes(); // Laravel <=10
+
         // $this->configureRateLimiting();
         // 
 
