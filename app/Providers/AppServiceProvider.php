@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Product;
 use App\Mail\UserCreated;
@@ -33,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Passport::routes(); // Laravel <=10
+        // Passport::tokensExpireIn(Carbon::now()->addSecond(30)); // Tokens de acceso expiran en 30 segundos
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(30)); // Tokens de acceso expiran en 30 minutos
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30)); // Refresh tokens expiran en 30 días
 
         // $this->configureRateLimiting();
         // 
