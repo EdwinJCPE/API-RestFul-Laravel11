@@ -8,6 +8,7 @@ use App\Http\Middleware\CustomThrottleRequests;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -39,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // 'throttle' => ThrottleRequests::class, // Este registro manual es inecesario. Laravel ya tiene registrado ThrottleRequests con el alias throttle por defecto.
             'signature' => SignatureMiddleware::class,
             'transform.input' => TransformInput::class,
+            'client.credentials' => CheckClientCredentials::class,
         ]);
 
         $middleware->web(prepend: [
