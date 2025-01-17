@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         // Passport::tokensExpireIn(Carbon::now()->addSecond(30)); // Tokens de acceso expiran en 30 segundos
         Passport::tokensExpireIn(Carbon::now()->addMinutes(30)); // Tokens de acceso expiran en 30 minutos
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30)); // Refresh tokens expiran en 30 días
+        Passport::enablePasswordGrant(); // Habilitar el Password Grant
 
         // $this->configureRateLimiting();
         // 
