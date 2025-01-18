@@ -15,8 +15,12 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+// import ExampleComponent from './components/ExampleComponent.vue';
+// app.component('example-component', ExampleComponent);
+
+import PersonalAccessTokens from './components/PersonalAccessTokens.vue';
+
+app.component('passpor-personal-access-tokens', PersonalAccessTokens);
 
 /**
  * The following block of code may be used to automatically register your
