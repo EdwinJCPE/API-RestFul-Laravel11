@@ -6,6 +6,9 @@ import 'bootstrap';
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+// import { Modal } from 'bootstrap';
+// window.Modal = Modal;  // Exponer Modal en window
+
 import axios from 'axios';
 window.axios = axios;
 
