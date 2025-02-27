@@ -17,10 +17,6 @@ Auth::routes([
 // // Logout Routes...
 // Route::post('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
-// // // Registration Routes...
-// // Route::get('register', 'App\Http\Controllers\Auth\RegisterController@showRegistrationForm')->name('register');
-// // Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
-
 // // Registration Routes...
 // Route::get('register', 'App\Http\Controllers\Auth\RegisterController@showRegistrationForm')->name('register');
 // Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
