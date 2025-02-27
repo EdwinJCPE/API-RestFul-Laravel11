@@ -6,26 +6,24 @@
 
 <template>
     <div>
-        <div class="card card-default">
-            <div class="card-header">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span>
-                        OAuth Clients
-                    </span>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    OAuth Clients
+                </span>
 
-                    <a class="action-link" tabindex="-1" @click="showCreateClientForm">
-                        Create New Client
-                    </a>
-                </div>
+                <a class="action-link" tabindex="-1" @click="showCreateClientForm">
+                    Create New Client
+                </a>
             </div>
 
             <div class="card-body">
                 <!-- Current Clients -->
-                <p class="mb-0" v-if="clients.length === 0">
+                <p class="alert alert-info text-center" v-if="clients.length === 0">
                     You have not created any OAuth clients.
                 </p>
 
-                <table class="table table-responsive table-borderless mb-0" v-if="clients.length > 0">
+                <table class="table table-bordered table-hover" v-if="clients.length > 0">
                     <thead>
                         <tr>
                             <th>Client ID</th>
@@ -37,31 +35,31 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="client in clients">
+                        <tr v-for="client in clients" :key="client.id">
                             <!-- ID -->
-                            <td style="vertical-align: middle;">
+                            <td class="align-middle">
                                 {{ client.id }}
                             </td>
 
                             <!-- Name -->
-                            <td style="vertical-align: middle;">
+                            <td class="align-middle">
                                 {{ client.name }}
                             </td>
 
                             <!-- Secret -->
-                            <td style="vertical-align: middle;">
+                            <td class="align-middle">
                                 <code>{{ client.secret ? client.secret : '-' }}</code>
                             </td>
 
                             <!-- Edit Button -->
-                            <td style="vertical-align: middle;">
+                            <td class="align-middle">
                                 <a class="action-link" tabindex="-1" @click="edit(client)">
                                     Edit
                                 </a>
                             </td>
 
                             <!-- Delete Button -->
-                            <td style="vertical-align: middle;">
+                            <td class="align-middle">
                                 <a class="action-link text-danger" @click="destroy(client)">
                                     Delete
                                 </a>
@@ -73,7 +71,7 @@
         </div>
 
         <!-- Create Client Modal -->
-        <div class="modal fade" id="modal-create-client" tabindex="-1" role="dialog">
+        <div class="modal fade" id="modal-create-client" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -81,73 +79,61 @@
                             Create Client
                         </h4>
 
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
                         <!-- Form Errors -->
                         <div class="alert alert-danger" v-if="createForm.errors.length > 0">
-                            <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
-                            <br>
+                            <strong>Whoops!</strong> Something went wrong!
                             <ul>
-                                <li v-for="error in createForm.errors">
+                                <li v-for="error in createForm.errors" :key="error">
                                     {{ error }}
                                 </li>
                             </ul>
                         </div>
 
                         <!-- Create Client Form -->
-                        <form role="form">
+                        <form @submit.prevent="store">
                             <!-- Name -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">Name</label>
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
 
-                                <div class="col-md-9">
-                                    <input id="create-client-name" type="text" class="form-control"
-                                                                @keyup.enter="store" v-model="createForm.name">
+                                <input id="create-client-name" type="text" class="form-control"
+                                                            @keyup.enter="store" v-model="createForm.name">
 
-                                    <span class="form-text text-muted">
-                                        Something your users will recognize and trust.
-                                    </span>
-                                </div>
+                                <span class="form-text text-muted">
+                                    Something your users will recognize and trust.
+                                </span>
                             </div>
 
                             <!-- Redirect URL -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">Redirect URL</label>
+                            <div class="mb-3">
+                                <label class="form-label">Redirect URL</label>
 
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="redirect"
-                                                    @keyup.enter="store" v-model="createForm.redirect">
+                                <input type="text" class="form-control" name="redirect"
+                                                @keyup.enter="store" v-model="createForm.redirect">
 
-                                    <span class="form-text text-muted">
-                                        Your application's authorization callback URL.
-                                    </span>
-                                </div>
+                                <span class="form-text text-muted">
+                                    Your application's authorization callback URL.
+                                </span>
                             </div>
 
                             <!-- Confidential -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">Confidential</label>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" v-model="createForm.confidential">
+                                <label class="form-check-label">Confidential</label>
 
-                                <div class="col-md-9">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" v-model="createForm.confidential">
-                                        </label>
-                                    </div>
-
-                                    <span class="form-text text-muted">
-                                        Require the client to authenticate with a secret. Confidential clients can hold credentials in a secure way without exposing them to unauthorized parties. Public applications, such as native desktop or JavaScript SPA applications, are unable to hold secrets securely.
-                                    </span>
-                                </div>
+                                <span class="form-text text-muted">
+                                    Require the client to authenticate with a secret. Confidential clients can hold credentials in a secure way without exposing them to unauthorized parties. Public applications, such as native desktop or JavaScript SPA applications, are unable to hold secrets securely.
+                                </span>
                             </div>
                         </form>
                     </div>
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                         <button type="button" class="btn btn-primary" @click="store">
                             Create
@@ -158,7 +144,7 @@
         </div>
 
         <!-- Edit Client Modal -->
-        <div class="modal fade" id="modal-edit-client" tabindex="-1" role="dialog">
+        <div class="modal fade" id="modal-edit-client" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,58 +152,56 @@
                             Edit Client
                         </h4>
 
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
                         <!-- Form Errors -->
                         <div class="alert alert-danger" v-if="editForm.errors.length > 0">
-                            <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
-                            <br>
+                            <strong>Whoops!</strong> Something went wrong!
                             <ul>
-                                <li v-for="error in editForm.errors">
+                                <li v-for="error in editForm.errors" :key="error">
                                     {{ error }}
                                 </li>
                             </ul>
                         </div>
 
                         <!-- Edit Client Form -->
-                        <form role="form">
+                        <form @submit.prevent="update">
                             <!-- Name -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">Name</label>
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
 
-                                <div class="col-md-9">
-                                    <input id="edit-client-name" type="text" class="form-control"
-                                                                @keyup.enter="update" v-model="editForm.name">
+                                <input id="edit-client-name" type="text" class="form-control"
+                                                            @keyup.enter="update" v-model="editForm.name">
 
-                                    <span class="form-text text-muted">
-                                        Something your users will recognize and trust.
-                                    </span>
-                                </div>
+                                <span class="form-text text-muted">
+                                    Something your users will recognize and trust.
+                                </span>
                             </div>
 
                             <!-- Redirect URL -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">Redirect URL</label>
+                            <div class="mb-3">
+                                <label class="form-label">Redirect URL</label>
 
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="redirect"
-                                                    @keyup.enter="update" v-model="editForm.redirect">
+                                <input type="text" class="form-control" name="redirect"
+                                                @keyup.enter="update" v-model="editForm.redirect">
 
-                                    <span class="form-text text-muted">
-                                        Your application's authorization callback URL.
-                                    </span>
-                                </div>
+                                <span class="form-text text-muted">
+                                    Your application's authorization callback URL.
+                                </span>
                             </div>
                         </form>
                     </div>
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-                        <button type="button" class="btn btn-primary" @click="update">
+                        <!-- <button type="button" class="btn btn-primary" @click="update">
+                            Save Changes
+                        </button> -->
+                        <button type="button" class="btn btn-primary" @click.prevent="update">
                             Save Changes
                         </button>
                     </div>
@@ -226,7 +210,7 @@
         </div>
 
         <!-- Client Secret Modal -->
-        <div class="modal fade" id="modal-client-secret" tabindex="-1" role="dialog">
+        <div class="modal fade" id="modal-client-secret" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -234,7 +218,7 @@
                             Client Secret
                         </h4>
 
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
@@ -248,7 +232,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -257,6 +241,8 @@
 </template>
 
 <script>
+import { Modal } from 'bootstrap';
+
     export default {
         /*
          * The component's data.
@@ -283,35 +269,33 @@
         },
 
         /**
-         * Prepare the component (Vue 1.x).
-         */
-        ready() {
-            this.prepareComponent();
-        },
-
-        /**
-         * Prepare the component (Vue 2.x).
+         * Prepare the component (Vue 2.x and Vue 3.x).
          */
         mounted() {
-            this.prepareComponent();
+            this.getClients();
+
+            // // Agregar evento para que el input del modal de creación reciba el foco al abrirse
+            // const createModalElement = document.getElementById('modal-create-client');
+            // if (createModalElement) {
+            //     createModalElement.addEventListener('shown.bs.modal', () => {
+            //         document.getElementById('create-client-name')?.focus();
+            //     });
+            // }
+
+            // // Agregar evento para que el input del modal de edición reciba el foco al abrirse
+            // const editModalElement = document.getElementById('modal-edit-client');
+            // if (editModalElement) {
+            //     editModalElement.addEventListener('shown.bs.modal', () => {
+            //         document.getElementById('edit-client-name')?.focus();
+            //     });
+            // }
+
+            // Agregar eventos para que el input de los modales reciba el foco al abrirse
+            this.setModalFocus('modal-create-client', 'create-client-name');
+            this.setModalFocus('modal-edit-client', 'edit-client-name');
         },
 
         methods: {
-            /**
-             * Prepare the component.
-             */
-            prepareComponent() {
-                this.getClients();
-
-                $('#modal-create-client').on('shown.bs.modal', () => {
-                    $('#create-client-name').focus();
-                });
-
-                $('#modal-edit-client').on('shown.bs.modal', () => {
-                    $('#edit-client-name').focus();
-                });
-            },
-
             /**
              * Get all of the OAuth clients for the user.
              */
@@ -326,7 +310,13 @@
              * Show the form for creating new clients.
              */
             showCreateClientForm() {
-                $('#modal-create-client').modal('show');
+                // const modalElement = document.getElementById('modal-create-client');
+                // if (modalElement) {
+                //     const modal = new Modal(modalElement);
+                //     modal.show();
+                // }
+
+                this.showModal('modal-create-client');
             },
 
             /**
@@ -337,7 +327,7 @@
                     'post',
                     '/oauth/clients',
                     this.createForm,
-                    '#modal-create-client'
+                    'modal-create-client'
                 );
             },
 
@@ -349,7 +339,7 @@
                 this.editForm.name = client.name;
                 this.editForm.redirect = client.redirect;
 
-                $('#modal-edit-client').modal('show');
+                this.showModal('modal-edit-client');
             },
 
             /**
@@ -360,14 +350,14 @@
                     'put',
                     '/oauth/clients/' + this.editForm.id,
                     this.editForm,
-                    '#modal-edit-client'
+                    'modal-edit-client'
                 );
             },
 
             /**
              * Persist the client to storage using the given form.
              */
-            persistClient(method, uri, form, modal) {
+            persistClient(method, uri, form, modalId) {
                 form.errors = [];
 
                 axios[method](uri, form)
@@ -378,18 +368,17 @@
                         form.redirect = '';
                         form.errors = [];
 
-                        $(modal).modal('hide');
+                        // Cerrar el modal después de la acción
+                        this.closeModal(modalId);
 
                         if (response.data.plainSecret) {
                             this.showClientSecret(response.data.plainSecret);
                         }
                     })
                     .catch(error => {
-                        if (typeof error.response.data === 'object') {
-                            form.errors = _.flatten(_.toArray(error.response.data.errors));
-                        } else {
-                            form.errors = ['Something went wrong. Please try again.'];
-                        }
+                        form.errors = error.response?.data?.errors
+                        ? Object.values(error.response.data.errors).flat()
+                        : ['Something went wrong. Please try again.'];
                     });
             },
 
@@ -398,8 +387,7 @@
              */
             showClientSecret(clientSecret) {
                 this.clientSecret = clientSecret;
-
-                $('#modal-client-secret').modal('show');
+                this.showModal('modal-client-secret');
             },
 
             /**
@@ -410,6 +398,43 @@
                         .then(response => {
                             this.getClients();
                         });
+            },
+
+            /**
+             * Abre un modal por su ID
+             * @param {string} modalId - ID del modal a abrir
+             */
+            showModal(modalId) {
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) {
+                    const modalInstance = new Modal(modalElement);
+                    modalInstance.show();
+                }
+            },
+
+            /**
+             * Cierra un modal por su ID
+             * @param {string} modalId - ID del modal a cerrar
+             */
+            closeModal(modalId) {
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) {
+                    const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
+                    modalInstance.hide();
+                }
+            },
+            /**
+             * Configura el foco en un input cuando se abre un modal
+             * @param {string} modalId - ID del modal
+             * @param {string} inputId - ID del input que recibirá el foco
+             */
+            setModalFocus(modalId, inputId) {
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) {
+                    modalElement.addEventListener('shown.bs.modal', () => {
+                        document.getElementById(inputId)?.focus();
+                    });
+                }
             }
         }
     }
