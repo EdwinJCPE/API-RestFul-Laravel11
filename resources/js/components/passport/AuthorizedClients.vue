@@ -7,12 +7,12 @@
 <template>
     <div>
         <div v-if="tokens.length > 0">
-            <div class="card card-default">
+            <div class="card">
                 <div class="card-header">Authorized Applications</div>
 
                 <div class="card-body">
                     <!-- Authorized Tokens -->
-                    <table class="table table-responsive table-borderless mb-0">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -22,30 +22,37 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="token in tokens">
+                            <tr v-for="token in tokens" :key="token.id">
                                 <!-- Client Name -->
-                                <td style="vertical-align: middle;">
+                                <td class="align-middle">
                                     {{ token.client.name }}
                                 </td>
 
                                 <!-- Scopes -->
-                                <td style="vertical-align: middle;">
+                                <td class="align-middle">
                                     <span v-if="token.scopes.length > 0">
                                         {{ token.scopes.join(', ') }}
                                     </span>
+                                    <span v-else class="text-muted">No scopes assigned</span>
                                 </td>
 
                                 <!-- Revoke Button -->
-                                <td style="vertical-align: middle;">
-                                    <a class="action-link text-danger" @click="revoke(token)">
+                                <td class="align-middle text-end">
+                                    <!-- <a class="action-link text-danger" @click="revoke(token)">
                                         Revoke
-                                    </a>
+                                    </a> -->
+                                    <button class="btn btn-danger btn-sm" @click="revoke(token)">
+                                        Revoke
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+        <div v-else class="alert alert-warning text-center">
+            No authorized applications.
         </div>
     </div>
 </template>
@@ -62,27 +69,13 @@
         },
 
         /**
-         * Prepare the component (Vue 1.x).
-         */
-        ready() {
-            this.prepareComponent();
-        },
-
-        /**
-         * Prepare the component (Vue 2.x).
+         * Prepare the component (Vue 2.x and Vue 3.x).
          */
         mounted() {
-            this.prepareComponent();
+            this.getTokens();
         },
 
         methods: {
-            /**
-             * Prepare the component (Vue 2.x).
-             */
-            prepareComponent() {
-                this.getTokens();
-            },
-
             /**
              * Get all of the authorized tokens for the user.
              */
