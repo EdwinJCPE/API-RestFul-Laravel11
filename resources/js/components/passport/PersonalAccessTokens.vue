@@ -26,19 +26,43 @@
                     </p>
 
                     <!-- Personal Access Tokens -->
-                    <table class="mb-0" v-if="tokens.length > 0">
+                    <table class="table table-bordered table-hover" v-if="tokens.length > 0">
                         <thead>
                             <tr>
+                                <th>User ID</th>
+                                <th>Client ID</th>
                                 <th>Name</th>
+                                <th>Scopes</th>
+                                <th>Revoked</th>
                                 <th></th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr v-for="token in tokens" :key="token.id">
+                                <!-- User ID -->
+                                <td class="align-middle">
+                                    {{ token.user_id }}
+                                </td>
+
+                                <!-- Client ID -->
+                                <td class="align-middle">
+                                    {{ token.client_id }}
+                                </td>
+
                                 <!-- Client Name -->
                                 <td class="align-middle">
                                     {{ token.name }}
+                                </td>
+
+                                <!-- Scopes -->
+                                <td class="align-middle">
+                                    {{ token.scopes ? token.scopes : '-' }}
+                                </td>
+
+                                <!-- Revoked -->
+                                <td class="align-middle">
+                                    {{ token.revoked ? token.revoked : '-' }}
                                 </td>
 
                                 <!-- Delete Button -->

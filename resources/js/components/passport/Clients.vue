@@ -27,8 +27,14 @@
                     <thead>
                         <tr>
                             <th>Client ID</th>
+                            <th>User ID</th>
                             <th>Name</th>
                             <th>Secret</th>
+                            <th>Provider</th>
+                            <th>Redirect</th>
+                            <th>Access</th>
+                            <th>Client Password</th>
+                            <th>Revoked</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -41,6 +47,11 @@
                                 {{ client.id }}
                             </td>
 
+                            <!-- User ID -->
+                            <td class="align-middle">
+                                {{ client.user_id }}
+                            </td>
+
                             <!-- Name -->
                             <td class="align-middle">
                                 {{ client.name }}
@@ -49,6 +60,31 @@
                             <!-- Secret -->
                             <td class="align-middle">
                                 <code>{{ client.secret ? client.secret : '-' }}</code>
+                            </td>
+
+                            <!-- Provider -->
+                            <td class="align-middle">
+                                {{ client.provider ? client.provider : '-' }}
+                            </td>
+
+                            <!-- Redirect -->
+                            <td class="align-middle">
+                                {{ client.redirect ? client.redirect : '-' }}
+                            </td>
+
+                            <!-- Access -->
+                            <td class="align-middle">
+                                {{ client.personal_access_client ? client.personal_access_client : '-' }}
+                            </td>
+
+                            <!-- Client Password -->
+                            <td class="align-middle">
+                                {{ client.password_client ? client.password_client : '-' }}
+                            </td>
+
+                            <!-- Revoked -->
+                            <td class="align-middle">
+                                {{ client.revoked ? client.revoked : '-' }}
                             </td>
 
                             <!-- Edit Button -->
