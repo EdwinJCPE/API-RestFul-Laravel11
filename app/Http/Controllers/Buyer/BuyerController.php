@@ -13,8 +13,9 @@ class BuyerController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:read-general')->only('show');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -24,11 +25,11 @@ class BuyerController extends ApiController
         // $compradores = Buyer::has('transactions')->get(); // Todos los usuarios que tengan transacciones - has recibe el nombre de una relación de Buyer
 
         // $compradores = Buyer::hasTransactions()->get(); // Hacemos uso del local Scope para todos los usuarios que tengan transacciones - has recibe el nombre de una relación de Buyer
-        
+
         // $compradores = Buyer::hasTransactions()->idAscending()->get(); // Hacemos uso del local Scope para todos los usuarios que tengan transacciones - has recibe el nombre de una relación de Buyer
 
-         $compradores = Buyer::all(); // Listará todos los buyer haciendo uso del global scope 
-        // $compradores = Buyer::orderBy('id')->get(); // Listará todos los buyer haciendo uso del global scope 
+         $compradores = Buyer::all(); // Listará todos los buyer haciendo uso del global scope
+        // $compradores = Buyer::orderBy('id')->get(); // Listará todos los buyer haciendo uso del global scope
 
         // return response()->json(['data' => $compradores], 200);
         return $this->showAll($compradores);
@@ -41,9 +42,9 @@ class BuyerController extends ApiController
     public function show(Buyer $buyer)
     {
         // $comprador = Buyer::has('transactions')->findOrFail($id);
-        // 
+        //
         // $comprador = Buyer::hasTransactions()->findOrFail($id); // Hacemos uso del local Scope
-        // 
+        //
         // $comprador = Buyer::findOrFail($id); // Hacemos uso del global Scope
 
         // return response()->json(['data' => $comprador], 200);
