@@ -9,6 +9,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use Laravel\Passport\Http\Middleware\CheckForAnyScope;
+use Laravel\Passport\Http\Middleware\CheckScopes;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,9 +37,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // $middleware->api(replace: [
         //     ThrottleRequests::class => CustomThrottleRequests::class,
         // ]);
-        
+
         $middleware->alias([
             // 'throttle' => ThrottleRequests::class, // Este registro manual es inecesario. Laravel ya tiene registrado ThrottleRequests con el alias throttle por defecto.
+            'scope' => CheckForAnyScope::class,
+            'scopes' => CheckScopes::class,
             'signature' => SignatureMiddleware::class,
             'transform.input' => TransformInput::class,
             'client.credentials' => CheckClientCredentials::class,
