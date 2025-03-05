@@ -13,6 +13,7 @@ class ProductCategoryController extends ApiController
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
+        $this->middleware('scope:manage-product')->except('index');
     }
 
     /**
@@ -38,12 +39,12 @@ class ProductCategoryController extends ApiController
         // $category = Category::findOrFail($category_id);
 
         // dd($product, $category);
-        // 
+        //
         // sync, attach, syncWithoutDetaching
-        // 
+        //
         // $product->categories()->sync([$category->id]); // Sincronización Completa (Elimina y Añade)
         // $product->categories()->attach([$category->id]); // Agregar Registros (Permite Duplicados)
-        // 
+        //
         $product->categories()->syncWithoutDetaching([$category->id]); // Añadir sin Eliminar (Evita Duplicados)
 
         return $this->showAll($product->categories);
@@ -55,7 +56,7 @@ class ProductCategoryController extends ApiController
     public function destroy(Product $product, Category $category)
     {
         if (!$product->categories()->findOrFail($category->id)) {
-            return $this->errorResponse('La categoría especificada no es una categoría de este producto.', 404);            
+            return $this->errorResponse('La categoría especificada no es una categoría de este producto.', 404);
         }
 
         $product->categories()->detach([$category->id]);

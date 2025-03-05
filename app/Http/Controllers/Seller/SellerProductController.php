@@ -18,6 +18,7 @@ class SellerProductController extends ApiController
         parent::__construct();
 
         $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
+        $this->middleware('scope:manage-product')->except('index');
     }
 
     /**
@@ -41,7 +42,7 @@ class SellerProductController extends ApiController
             'description' => 'required',
             'quantity' => 'required|integer|min:1',
             'image' => 'required|image',
-        ]; 
+        ];
 
         // $rules = [
         //     'name' => ['required'],
@@ -49,7 +50,7 @@ class SellerProductController extends ApiController
         //     'quantity' => ['required', 'integer', 'min:1'],
         //     'image' => ['required', 'image'],
         // ];
-        // 
+        //
         // $this->validate($request, $rules); // En Laravel 10<
         // request()->validate($rules);
         $request->validate($rules);
@@ -76,7 +77,7 @@ class SellerProductController extends ApiController
         // ]);
 
         // 3ra Forma
-        // $product = Product::create($request->only(['name', 'description', 'quantity']) + 
+        // $product = Product::create($request->only(['name', 'description', 'quantity']) +
         //     [
         //         'status' => Product::PRODUCTO_NO_DISPONIBLE,
         //         'image' => '1.jpg',
@@ -110,7 +111,7 @@ class SellerProductController extends ApiController
         // if ($seller->id != $product->seller_id) {
         //     return $this->errorResponse('El vendedor especificado no es el vendedor real del producto.', 422);
         // }
-        // 
+        //
         $this->verificarVendedor($seller, $product);
 
         $product->fill($request->only([
@@ -130,10 +131,10 @@ class SellerProductController extends ApiController
         if ($request->hasFile('image')) {
             Storage::delete($product->image);
             // Storage::disk('images')->delete($product->image);
-            // 
+            //
             // $product->image = $request->image->store('');
             $product->image = $request->image->store('', 'images');
-            
+
         }
 
         if ($product->isClean()) { // isClean: Verifica que la instancia no haya cambiado
