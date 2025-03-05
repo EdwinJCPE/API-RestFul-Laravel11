@@ -38,9 +38,10 @@ class AppServiceProvider extends ServiceProvider
         Passport::tokensExpireIn(Carbon::now()->addMinutes(30)); // Tokens de acceso expiran en 30 minutos
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30)); // Refresh tokens expiran en 30 días
         Passport::enablePasswordGrant(); // Habilitar el Password Grant
+        Passport::enableImplicitGrant();
 
         // $this->configureRateLimiting();
-        // 
+        //
 
         // Reemplazar globalmente el alias 'throttle' para que apunte a CustomThrottleRequests
         $this->app->router->aliasMiddleware('throttle', CustomThrottleRequests::class);
@@ -48,12 +49,12 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-        
+
 
         // RateLimiter::for('api', function (Request $request) {
         //     return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip())
         //         ->response(function (Request $request, array $headers) {
-                
+
         //         // return response('Custom response...', 429, $headers);
         //         return $this->errorResponse('Has excedido el límite de solicitudes. Intenta más tarde.', 429);
         //     });
@@ -68,8 +69,8 @@ class AppServiceProvider extends ServiceProvider
         //     retry(5, function() use ($user) { // Si el envío de correo falla Laravel lo va intentar 5 veces cada 100 ms
         //         Mail::to($user)->send(new UserCreated($user));
         //     }, 100);
-        // }); 
-        // 
+        // });
+        //
         // User::updated(function ($user) {
         //     if ($user->isDirty('email')) {
         //         retry(5, function() use ($user) {
@@ -77,7 +78,7 @@ class AppServiceProvider extends ServiceProvider
         //         }, 100);
         //     }
         // });
-        
+
         // Product::updated(function (Product $product) {
         //     if ($product->quantity == 0 && $product->estaDisponible()) {
         //         $product->status = Product::PRODUCTO_NO_DISPONIBLE;
