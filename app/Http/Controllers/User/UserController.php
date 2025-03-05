@@ -17,10 +17,11 @@ class UserController extends ApiController
     public function __construct()
     {
         // parent::__construct();
-        // 
+        //
         $this->middleware('client.credentials')->only(['store', 'resend']);
         $this->middleware('auth:api')->except(['store', 'verify', 'resend']);
         $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
+        $this->middleware('scope:manage-account')->only(['show', 'update']);
     }
 
     /**
@@ -40,7 +41,7 @@ class UserController extends ApiController
         //     'Content-Type' => 'application/json; charset=utf-8',
         // ];
         // return response()->json($usuarios, 200, $headers);
-        // 
+        //
     }
 
     /**
@@ -114,7 +115,7 @@ class UserController extends ApiController
         // dd($user);
 
         // dd($user, request()->all(), $request->all());
-        // 
+        //
         // $reglas = [
         //     // 'email' => 'email|unique:users,email,' . $user->id,
         //     'email' => ['email', Rule::unique('users')->ignore($user->id)],
@@ -134,7 +135,7 @@ class UserController extends ApiController
         $request->validate($reglas);
 
         // dd(request()->all(), $request->all(), $user, $request->validate($reglas));
-        // 
+        //
         if ($request->has('name')) { // Si la petición tiene un campo name
             $user->name = $request->name;
             // $user->name = request()->name;
@@ -190,13 +191,13 @@ class UserController extends ApiController
     public function verify(string $token)
     {
         $user = User::where('verification_token', $token)->firstOrFail();
-        
+
         $user->verified = User::USUARIO_VERIFICADO;
         $user->email_verified_at = now();
         $user->verification_token = null;
 
         $user->save();
-        
+
         return $this->showMessage('La cuenta ha sido verificada.');
     }
 
