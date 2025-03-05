@@ -17,6 +17,7 @@ class ProductBuyerTransactionController extends ApiController
         parent::__construct();
 
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
+        $this->middleware('scope:purchase-product')->only('store');
     }
 
     /**
@@ -39,7 +40,7 @@ class ProductBuyerTransactionController extends ApiController
 
         if (!$buyer->esVerificado()) {
              return $this->errorResponse('El comprador debe ser un usuario verificado.', 409);
-        } 
+        }
 
         if (!$product->seller->esVerificado()) {
             return $this->errorResponse('El vendedor debe ser un usuario verificado.', 409);
@@ -49,7 +50,7 @@ class ProductBuyerTransactionController extends ApiController
         // dump($product::PRODUCTO_DISPONIBLE);
         // dump($product->status);
         // dd($product);
-        // 
+        //
         if (!$product->estaDisponible()) {
             return $this->errorResponse('El producto para esta transacción no esta disponible.', 409);
         }
