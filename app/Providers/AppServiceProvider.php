@@ -15,6 +15,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Http\Middleware\CustomThrottleRequests;
+use App\Models\Buyer;
+use App\Policies\BuyerPolicy;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,6 +49,9 @@ class AppServiceProvider extends ServiceProvider
             'manage-account' => 'Obtener la informacion de la cuenta, nombre, email, estado (sin contraseña), modificar datos como email, nombre y contraseña. No puede eliminar la cuenta',
             'read-general' => 'Obtener información general, categorías donde se compra y se vende, productos vendidos o comprados, transacciones, compras y ventas',
         ]);
+
+        // Políticas de acceso controlado por políticas
+        Gate::policy(Buyer::class, BuyerPolicy::class);
 
         // $this->configureRateLimiting();
         //

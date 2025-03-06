@@ -11,8 +11,9 @@ class BuyerTransactionController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('can:view,buyer')->only('index');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -23,10 +24,10 @@ class BuyerTransactionController extends ApiController
         // 1RA FORMA
         // $buyer = Buyer::findOrFail($id);
         // $transactions = $buyer->transactions;
-        // 
+        //
         // 2DA FORMA
         $transactions = $buyer->transactions;
-        
+
         // dd($transactions);
         return $this->showAll($transactions);
     }
