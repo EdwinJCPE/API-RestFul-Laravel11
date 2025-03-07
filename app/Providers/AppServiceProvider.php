@@ -19,6 +19,7 @@ use App\Models\Buyer;
 use App\Models\Seller;
 use App\Policies\BuyerPolicy;
 use App\Policies\SellerPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         // Políticas de acceso controlado por políticas
         Gate::policy(Buyer::class, BuyerPolicy::class);
         Gate::policy(Seller::class, SellerPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
 
         // $this->configureRateLimiting();
         //
