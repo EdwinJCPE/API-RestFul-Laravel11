@@ -19,6 +19,7 @@ use App\Models\Buyer;
 use App\Models\Seller;
 use App\Models\Transaction;
 use App\Policies\BuyerPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\SellerPolicy;
 use App\Policies\TransactionPolicy;
 use App\Policies\UserPolicy;
@@ -60,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Seller::class, SellerPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Transaction::class, TransactionPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
 
         // $this->configureRateLimiting();
         //
