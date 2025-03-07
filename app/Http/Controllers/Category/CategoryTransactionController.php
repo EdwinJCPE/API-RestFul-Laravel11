@@ -18,6 +18,8 @@ class CategoryTransactionController extends ApiController
      */
     public function index(Category $category)
     {
+        $this->allowedAdminAction();
+
         // Obtener la lista de transacciones de una categoría específica
         $transactions = $category->products()
             // ->has('transactions')

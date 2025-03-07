@@ -18,9 +18,11 @@ class ProductBuyerController extends ApiController
      */
     public function index(Product $product)
     {
+        $this->allowedAdminAction();
+
         // Obtener la lista de compradores de un producto especifico
         // $buyers = $product->transactions()->with('buyer')->get(); // Se obtiene una lista de transacciones, cada una de ellas en su interior con su buyer (comprador)
-        // 
+        //
         $buyers = $product->transactions()
             ->with('buyer')
             ->get()

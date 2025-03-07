@@ -18,6 +18,8 @@ class SellerBuyerController extends ApiController
      */
     public function index(Seller $seller)
     {
+        $this->allowedAdminAction();
+
         // Obtener la lista de compradores de un vendedor específico
         $buyers = $seller->products()
             ->whereHas('transactions') // Los productos que se obtienen son aquellos que al menos están asociadas a una transacción

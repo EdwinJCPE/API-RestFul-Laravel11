@@ -6,6 +6,8 @@ use App\Models\Buyer;
 use Illuminate\Http\Request;
 // use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 
 // class BuyerController extends Controller
 class BuyerController extends ApiController
@@ -22,6 +24,11 @@ class BuyerController extends ApiController
      */
     public function index()
     {
+        // if (Gate::denies('admin-action')) {
+        //     throw new AuthorizationException('Esta acción no es permitida');
+        // }
+        $this->allowedAdminAction();
+
         // $compradores = Buyer::all(); // Listará todos los usuarios
         // $compradores = Buyer::has('transactions')->get(); // Todos los usuarios que tengan transacciones - has recibe el nombre de una relación de Buyer
 

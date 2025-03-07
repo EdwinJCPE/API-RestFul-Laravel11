@@ -22,6 +22,8 @@ class SellerController extends ApiController
      */
     public function index()
     {
+        $this->allowedAdminAction();
+
         // $vendedores = Seller::has('products')->get();
         $vendedores = Seller::all(); // Listará todos los Seller haciendo uso del global scope
         // $vendedores = Seller::orderBy('id', 'asc')->get(); // Listará todos los Seller haciendo uso del global scope

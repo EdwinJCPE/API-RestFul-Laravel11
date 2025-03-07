@@ -12,17 +12,19 @@ class BuyerSellerController extends ApiController
     {
         parent::__construct();
     }
-    
+
     /**
      * Display a listing of the resource.
      */
     // public function index(string $id)
     public function index(Buyer $buyer)
     {
+        $this->allowedAdminAction();
+
         // Obtener los vendedores de un comprador específico
         // $buyer = Buyer::findOrFail($id);
         // $sellers = $buyer->transactions()->with('product.seller')->get();
-        // 
+        //
         $sellers = $buyer->transactions()->with('product.seller')
             ->get()
             ->pluck('product.seller')

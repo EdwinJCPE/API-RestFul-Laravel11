@@ -12,12 +12,14 @@ class CategoryBuyerController extends ApiController
     {
         parent::__construct();
     }
-    
+
     /**
      * Display a listing of the resource.
      */
     public function index(Category $category)
     {
+        $this->allowedAdminAction();
+
         // Obtener la lista de compradores de una categoría específica
         $buyers = $category->products()
             ->whereHas('transactions') // Obtiene los productos que al menos están asociadas a una transacción

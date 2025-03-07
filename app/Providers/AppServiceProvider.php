@@ -63,6 +63,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Transaction::class, TransactionPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
 
+        Gate::define('admin-action', function (User $user) {
+            return $user->esAdministrador();
+        });
+
         // $this->configureRateLimiting();
         //
 

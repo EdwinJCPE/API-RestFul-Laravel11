@@ -19,10 +19,12 @@ class CategorySellerController extends ApiController
     // public function index(string $id)
     public function index(Category $category)
     {
+        $this->allowedAdminAction();
+
         // Obtener la lista de los vendedores de una categoría
         // $category = Category::findOrFail($id);
         // $sellers = $category->products()->with('seller')->get(); //Se obtiene una lista de productos, cada una de ellas en su interior con un vendedor
-        // 
+        //
         $sellers = $category->products()
             ->with('seller')
             ->get()
