@@ -16,7 +16,9 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Http\Middleware\CustomThrottleRequests;
 use App\Models\Buyer;
+use App\Models\Seller;
 use App\Policies\BuyerPolicy;
+use App\Policies\SellerPolicy;
 use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Políticas de acceso controlado por políticas
         Gate::policy(Buyer::class, BuyerPolicy::class);
+        Gate::policy(Seller::class, SellerPolicy::class);
 
         // $this->configureRateLimiting();
         //
