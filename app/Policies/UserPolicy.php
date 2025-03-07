@@ -3,10 +3,13 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Traits\AdminActions;
 use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
+    use AdminActions;
+
     /**
      * Determine whether the user can view the model.
      */

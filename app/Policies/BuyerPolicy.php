@@ -4,10 +4,22 @@ namespace App\Policies;
 
 use App\Models\Buyer;
 use App\Models\User;
+use App\Traits\AdminActions;
 use Illuminate\Auth\Access\Response;
 
 class BuyerPolicy
 {
+    use AdminActions;
+
+    // public function before(User $user, string $ability): bool|null
+    // {
+    //     if ($user->esAdministrador()) {
+    //         return true;
+    //     }
+
+    //     return null;
+    // }
+
     /**
      * Determine whether the user can view the model.
      */

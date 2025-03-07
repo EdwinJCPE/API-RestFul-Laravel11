@@ -4,10 +4,13 @@ namespace App\Policies;
 
 use App\Models\Seller;
 use App\Models\User;
+use App\Traits\AdminActions;
 use Illuminate\Auth\Access\Response;
 
 class SellerPolicy
 {
+    use AdminActions;
+
     /**
      * Determine whether the user can view the model.
      */
