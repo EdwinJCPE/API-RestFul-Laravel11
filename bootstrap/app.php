@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(HandleCors::class);
+        // $middleware->append(HandleCors::class);  // Middleware global (afecta a TODAS las rutas) - No es necesario ya que se esta registrando con un alias líneas más abajo
 
         // // Reemplazar el middleware de throttling en las rutas API
         // // Solo se reemplaza la clase ThrottleRequests internamente en los grupos de middleware web o api, pero el alias throttle sigue apuntando al middleware original. La solución es reemplazar a nivel de alias en AppServiceProvider.
@@ -47,6 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'scopes' => CheckScopes::class,
             'signature' => SignatureMiddleware::class,
             'transform.input' => TransformInput::class,
+            'cors' => HandleCors::class,
             'client.credentials' => CheckClientCredentials::class,
         ]);
 
@@ -56,6 +57,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api(prepend: [
+            'cors',
             // SignatureMiddleware::class.':X-Application-Name',
             'signature:X-Application-Name',
             'throttle:api', // Aplicar throttle:api a todas las rutas API
