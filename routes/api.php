@@ -31,7 +31,7 @@ use App\Http\Controllers\Transaction\TransactionCategoryController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
-// 
+//
 
 /**
  * Buyers
@@ -85,6 +85,7 @@ Route::apiResource('sellers.transactions', SellerTransactionController::class, [
 /**
  * Users
  */
+Route::get('users/me', [UserController::class, 'me'])->name('me');
 // Route::resource('users', UserController::class, [ 'except' => ['create', 'edit']]);
 Route::apiResource('users', UserController::class);
 // Route::name('verify')->get('users/verify/{token}', 'User\UserController@verify'); // Rutas Fluidas - En Laravel 7<
